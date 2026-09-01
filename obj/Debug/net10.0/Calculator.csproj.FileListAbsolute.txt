@@ -1,0 +1,14 @@
+/home/kronos-perce/Coding-Projects/Calculator/bin/Debug/net10.0/Calculator
+/home/kronos-perce/Coding-Projects/Calculator/bin/Debug/net10.0/Calculator.deps.json
+/home/kronos-perce/Coding-Projects/Calculator/bin/Debug/net10.0/Calculator.runtimeconfig.json
+/home/kronos-perce/Coding-Projects/Calculator/bin/Debug/net10.0/Calculator.dll
+/home/kronos-perce/Coding-Projects/Calculator/bin/Debug/net10.0/Calculator.pdb
+/home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/Calculator.GeneratedMSBuildEditorConfig.editorconfig
+/home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/Calculator.AssemblyInfoInputs.cache
+/home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/Calculator.AssemblyInfo.cs
+/home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/Calculator.csproj.CoreCompileInputs.cache
+/home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/Calculator.dll
+/home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/refint/Calculator.dll
+/home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/Calculator.pdb
+/home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/Calculator.genruntimeconfig.cache
+/home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/ref/Calculator.dll
