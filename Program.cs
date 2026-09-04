@@ -1,13 +1,13 @@
 ﻿using Calculator;
 
 Console.Write("Input your expression here: ");
-string input = Console.ReadLine().Trim();
+string? input = Console.ReadLine().Trim();
 
-List<object> parsedInput = ExpressionParser.ParseExpression(input);
+List<Token> parsedInput = Tokenizer.TokenizeExpression(input);
 
 Console.WriteLine();
 Console.Write($"You inputted the following: ");
-foreach (object item in parsedInput)
+foreach (Token item in parsedInput)
 {
-    Console.Write(item);
+    Console.Write(item.Value);
 }

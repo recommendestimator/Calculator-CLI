@@ -12,3 +12,4 @@
 /home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/Calculator.pdb
 /home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/Calculator.genruntimeconfig.cache
 /home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/ref/Calculator.dll
+/home/kronos-perce/Coding-Projects/Calculator/obj/Debug/net10.0/Calculator.sourcelink.json
