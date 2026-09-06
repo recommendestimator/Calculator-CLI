@@ -1,6 +1,6 @@
 namespace Calculator;
 
-readonly struct Token(string value)
+readonly struct Token
 {
     public required string Value { get; init; }
 }

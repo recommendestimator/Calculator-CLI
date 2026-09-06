@@ -1,7 +1,7 @@
 ﻿using Calculator;
 
 Console.Write("Input your expression here: ");
-string? input = Console.ReadLine().Trim();
+string? input = Console.ReadLine()?.Trim();
 
 List<Token> parsedInput = Tokenizer.TokenizeExpression(input);
 

@@ -1,94 +1,135 @@
-using System.Collections;
-
 namespace Calculator;
 
 class Tokenizer
 {
+#region Orchestrator
     public static List<Token> TokenizeExpression(string? expression)
     {
         if (expression is null)
         {
-            return [
-                new() 
-                {
-                    Value = "0"
-                }
-            ];
+            return [ new() { Value = "0"} ];
         }
 
         List<Token> parsedTerms = [];
-        for (int index = 0; index < expression.Length; index++)
-        {
-            Token token = new()
-            {
-                Value = GetTokenAndNewIndex(expression, index, out int newIndex)
-            };
+        int index = 0;
 
-            parsedTerms.Add(token);
-            index = newIndex;
+        while (index < expression.Length)
+        {
+            if (IsWhitespace(expression[index]))
+            {
+                index++;
+            }
+            else if (TryReadNumber(expression, ref index, out Token numberToken))
+            {
+                parsedTerms.Add(numberToken);
+            } 
+            else if (TryReadOperator(expression, ref index, out Token operatorToken))
+            {
+                parsedTerms.Add(operatorToken);
+            }
+            else
+            {
+                throw new InvalidDataException(
+                    $"""
+                    The data you inputted was invalid!
+                    The char in question: {expression[index]},
+                    Position: {index}
+                    """
+                );
+            }
         }
 
         return parsedTerms;
     }
+#endregion
 
-    private static string GetTokenAndNewIndex(string input, int index, out int newIndex)
-    {      
-        string token = "";
-    
-        // Numbers
-        while (index < input.Length && IsDigit(input[index]))
+
+#region Token Readers
+    // private static bool TryReadInt(string expression, ref int index, out Token token)
+    // {
+    //     if (!IsDigit(expression[index]))
+    //     {
+    //         token = default;
+    //         return false;
+    //     }
+
+    //     int start = index;
+    //     while (index < expression.Length && IsDigit(expression[index]))
+    //     {
+    //         index++;
+    //     }
+
+    //     token = new() { Value = expression[start..index] }; // Gets all chars from 'start' to 'index' (not including index itself).
+    //     return true;
+    // }
+
+    private static bool TryReadNumber(string expression, ref int index, out Token token)
+    {
+        if(!IsDigit(expression[index]) && !IsDecimal(expression[index]))
         {
-            token += input[index];
-            index++;
+            token = default;
+            return false;
         }
-        if (token.Length != 0)
+
+        bool hasDecimal = false;
+        int start = index;
+        while (index < expression.Length)
         {
-            newIndex = index - 1;
-            return token;
+            if (IsDigit(expression[index]))
+            {
+                index++;
+                continue;
+            }
+
+            else if (IsDecimal(expression[index])) 
+            {
+                if (hasDecimal)
+                {
+                    throw new InvalidDataException(
+                        $"""
+                        You're inputting a variable with more than 1 decimal!
+                        Error @ position: {index}
+                        What the parser read: {expression[start..index]}
+                        """
+                    );
+                }
+                else
+                {
+                    hasDecimal = true;
+                    index++;
+                    continue;
+                }
+            }
+
+            break; // We've hit a char that neither a digit nor decimal.
         }
 
-        // Operators
-        if (IsAMathematicalOperator(input[index]))
-        {
-            token += input[index];
-            newIndex = index;
-
-            return token;
-        }
-
-        throw new InvalidDataException(
-            $"""
-            You inputted some sort of invalid data!
-            Invalid char: {input[index]}
-            Position: {index}
-            """
-        );
+        token = new() { Value = expression[start..index] };
+        return true;
     }
 
-    /// <summary>
-    /// Checks if the given char is a digit.
-    /// 
-    /// This works since, converting char to an int, '0' = 48 and '9' = 57. 
-    /// We simply check if the int-represntation of the char is between these values.
-    /// </summary>
-    /// 
-    /// <param name="c">The inputted char.</param>
-    /// 
-    /// <returns>TRUE if the given char is a digit, FALSE otherwise.</returns>
+    private static bool TryReadOperator(string expression, ref int index, out Token token)
+    {
+        if (!IsAMathematicalOperator(expression[index]))
+        {
+            token = default;
+            return false;
+        }
+
+        token = new() { Value = expression[index].ToString() };
+        index++;
+        return true;
+    }
+#endregion
+
+
+#region Char Checking
     public static bool IsDigit(char c) => c is >= '0' and <= '9';
 
-    /// <summary>
-    /// Checks if the given char is a mathematical operator. The supported operators for now is as follows: 
-    /// <br/>
-    /// ADD         (+),    <br/>
-    /// SUBTRACT    (-),    <br/>
-    /// MULTIPLY    (*),    <br/>
-    /// DIVIDE      (/),    <br/>
-    /// MODULO      (%)     <br/>
-    /// </summary>
-    /// 
-    /// <param name="c">The inputted char.</param>
-    /// 
-    /// <returns>TRUE if the char is any of the listed chars above, FALSE otherwise.</returns>
+    public static bool IsDecimal(char c) => c is '.';
+
     public static bool IsAMathematicalOperator(char c) => c is '+' or '-' or '*' or '/' or '%';
+
+    public static bool IsWhitespace(char c) => c is ' ';
+#endregion
 }
