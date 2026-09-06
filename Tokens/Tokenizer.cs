@@ -1,18 +1,24 @@
-namespace Calculator;
+namespace Calculator.Tokens;
 
-class Tokenizer
+internal class Tokenizer
 {
 #region Orchestrator
     public static List<Token> TokenizeExpression(string? expression)
     {
         if (expression is null)
         {
-            return [ new() { Value = "0"} ];
+            return 
+            [
+                new() 
+                {
+                    Value = "0",
+                    TokenType = TokenType.DIGIT
+                }
+            ];
         }
 
         List<Token> parsedTerms = [];
         int index = 0;
-
         while (index < expression.Length)
         {
             if (IsWhitespace(expression[index]))
@@ -45,24 +51,6 @@ class Tokenizer
 
 
 #region Token Readers
-    // private static bool TryReadInt(string expression, ref int index, out Token token)
-    // {
-    //     if (!IsDigit(expression[index]))
-    //     {
-    //         token = default;
-    //         return false;
-    //     }
-
-    //     int start = index;
-    //     while (index < expression.Length && IsDigit(expression[index]))
-    //     {
-    //         index++;
-    //     }
-
-    //     token = new() { Value = expression[start..index] }; // Gets all chars from 'start' to 'index' (not including index itself).
-    //     return true;
-    // }
-
     private static bool TryReadNumber(string expression, ref int index, out Token token)
     {
         if(!IsDigit(expression[index]) && !IsDecimal(expression[index]))
@@ -80,7 +68,6 @@ class Tokenizer
                 index++;
                 continue;
             }
-
             else if (IsDecimal(expression[index])) 
             {
                 if (hasDecimal)
@@ -89,7 +76,7 @@ class Tokenizer
                         $"""
                         You're inputting a variable with more than 1 decimal!
                         Error @ position: {index}
-                        What the parser read: {expression[start..index]}
+                        What the parser read: {expression[start..(index + 1)]}
                         """
                     );
                 }
@@ -100,11 +87,17 @@ class Tokenizer
                     continue;
                 }
             }
-
-            break; // We've hit a char that neither a digit nor decimal.
+            else
+            {
+                break; // We've hit a char that's neither a digit nor decimal.
+            }
         }
 
-        token = new() { Value = expression[start..index] };
+        token = new()
+        {
+            Value = expression[start..index],
+            TokenType = TokenType.DIGIT
+        };
         return true;
     }
 
@@ -116,7 +109,11 @@ class Tokenizer
             return false;
         }
 
-        token = new() { Value = expression[index].ToString() };
+        token = new()
+        {
+            Value = expression[index].ToString(),
+            TokenType = TokenType.OPERATOR
+        };
         index++;
         return true;
     }
