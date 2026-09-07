@@ -2,16 +2,16 @@ namespace Calculator.Tokens;
 
 internal class Tokenizer
 {
-#region Orchestrator
+#region Main
     public static List<Token> TokenizeExpression(string? expression)
     {
-        if (expression is null)
+        if (expression is null or "")
         {
             return 
             [
                 new() 
                 {
-                    Value = "0",
+                    Value = "EMPTY",
                     TokenType = TokenType.DIGIT
                 }
             ];
@@ -35,9 +35,10 @@ internal class Tokenizer
             }
             else
             {
-                throw new InvalidDataException(
+                throw new Exception
+                (
                     $"""
-                    The data you inputted was invalid!
+                    Could not tokenize the inputted expression!
                     The char in question: {expression[index]},
                     Position: {index}
                     """
@@ -50,7 +51,7 @@ internal class Tokenizer
 #endregion
 
 
-#region Token Readers
+#region Expression Readers
     private static bool TryReadNumber(string expression, ref int index, out Token token)
     {
         if(!IsDigit(expression[index]) && !IsDecimal(expression[index]))
@@ -72,11 +73,12 @@ internal class Tokenizer
             {
                 if (hasDecimal)
                 {
-                    throw new InvalidDataException(
+                    throw new Exception
+                    (
                         $"""
                         You're inputting a variable with more than 1 decimal!
                         Error @ position: {index}
-                        What the parser read: {expression[start..(index + 1)]}
+                        What the parser read: {expression[start .. (index + 1)]}
                         """
                     );
                 }
@@ -87,15 +89,13 @@ internal class Tokenizer
                     continue;
                 }
             }
-            else
-            {
-                break; // We've hit a char that's neither a digit nor decimal.
-            }
+            
+            break; // We've hit a char that's neither a digit nor decimal.
         }
 
         token = new()
         {
-            Value = expression[start..index],
+            Value = expression[start .. index],
             TokenType = TokenType.DIGIT
         };
         return true;
@@ -121,12 +121,12 @@ internal class Tokenizer
 
 
 #region Char Checking
-    public static bool IsDigit(char c) => c is >= '0' and <= '9';
+    private static bool IsDigit(char c) => c is >= '0' and <= '9';
 
-    public static bool IsDecimal(char c) => c is '.';
+    private static bool IsDecimal(char c) => c is '.';
 
-    public static bool IsAMathematicalOperator(char c) => c is '+' or '-' or '*' or '/' or '%';
+    private static bool IsAMathematicalOperator(char c) => c is '+' or '-' or '*' or '/' or '%';
 
-    public static bool IsWhitespace(char c) => c is ' ';
+    private static bool IsWhitespace(char c) => c is ' ';
 #endregion
 }
