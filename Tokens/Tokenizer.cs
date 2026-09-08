@@ -120,7 +120,7 @@ internal class Tokenizer
 #endregion
 
 
-#region Char Checking
+#region Char Checkers
     private static bool IsDigit(char c) => c is >= '0' and <= '9';
 
     private static bool IsDecimal(char c) => c is '.';

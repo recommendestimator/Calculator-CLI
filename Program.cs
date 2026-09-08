@@ -5,11 +5,11 @@ Console.Write("Input your expression here: ");
 string? input = Console.ReadLine()?.Trim();
 
 List<Token> tokenizedInput = Tokenizer.TokenizeExpression(input);
-List<ITerm> terminizedInput = TermParser.ParseTokens(tokenizedInput);
+List<ITerm> terminizedTokens = TermParser.ParseTokens(tokenizedInput);
 
 Console.WriteLine();
 Console.Write($"You inputted the following: ");
-foreach (ITerm item in terminizedInput)
+foreach (ITerm term in terminizedTokens)
 {
-    Console.Write(item);    
+    Console.Write(term + ", ");    
 }
